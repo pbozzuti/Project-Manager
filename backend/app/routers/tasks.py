@@ -6,9 +6,10 @@ from sqlalchemy import asc
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
+from ..auth import require_user
 from ..database import get_db
 
-router = APIRouter(prefix="/tasks", tags=["tasks"])
+router = APIRouter(prefix="/tasks", tags=["tasks"], dependencies=[Depends(require_user)])
 
 SORT_COLUMNS = {
     "assignee": models.Task.assignee,

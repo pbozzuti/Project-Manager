@@ -34,7 +34,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       try {
         await fetch(`${BACKEND_URL}/users/upsert`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-Internal-Secret": process.env.INTERNAL_API_SECRET ?? "",
+          },
           body: JSON.stringify({
             email,
             name: profile?.name,

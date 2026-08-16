@@ -6,9 +6,10 @@ from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
+from ..auth import require_user
 from ..database import get_db
 
-router = APIRouter(prefix="/purchases", tags=["purchases"])
+router = APIRouter(prefix="/purchases", tags=["purchases"], dependencies=[Depends(require_user)])
 
 SORT_COLUMNS = {
     "date": models.Purchase.date,

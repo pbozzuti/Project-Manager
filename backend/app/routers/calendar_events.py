@@ -5,9 +5,12 @@ from sqlalchemy import asc
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
+from ..auth import require_user
 from ..database import get_db
 
-router = APIRouter(prefix="/calendar-events", tags=["calendar-events"])
+router = APIRouter(
+    prefix="/calendar-events", tags=["calendar-events"], dependencies=[Depends(require_user)]
+)
 
 
 @router.get("", response_model=list[schemas.CalendarEventOut])

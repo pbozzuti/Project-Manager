@@ -12,9 +12,35 @@ import {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+// Every FastAPI call carries a short-lived per-user token minted by our own
+// Next.js /api/token route (which only hands one out to a signed-in
+// session) — cached here and refreshed shortly before it expires, so we're
+// not fetching a fresh token on every single request.
+let cachedToken: { value: string; expiresAt: number } | null = null;
+
+async function getAuthToken(): Promise<string> {
+  const now = Date.now();
+  if (cachedToken && cachedToken.expiresAt - now > 60_000) {
+    return cachedToken.value;
+  }
+
+  const res = await fetch("/api/token");
+  if (!res.ok) {
+    throw new Error("Not signed in");
+  }
+  const { token } = await res.json();
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  cachedToken = { value: token, expiresAt: payload.exp * 1000 };
+  return token;
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = await getAuthToken();
   const res = await fetch(`${API_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     ...options,
   });
   if (!res.ok) {

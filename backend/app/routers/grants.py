@@ -2,10 +2,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
+from ..auth import require_user
 from ..database import get_db
 from ..scraper.dcase import scrape_dcase
 
-router = APIRouter(prefix="/grants", tags=["grants"])
+router = APIRouter(prefix="/grants", tags=["grants"], dependencies=[Depends(require_user)])
 
 
 @router.get("", response_model=list[schemas.GrantOut])

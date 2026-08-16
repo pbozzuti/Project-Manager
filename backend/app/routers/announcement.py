@@ -4,9 +4,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
+from ..auth import require_user
 from ..database import get_db
 
-router = APIRouter(prefix="/announcement", tags=["announcement"])
+router = APIRouter(
+    prefix="/announcement", tags=["announcement"], dependencies=[Depends(require_user)]
+)
 
 
 @router.get("", response_model=Optional[schemas.AnnouncementOut])
