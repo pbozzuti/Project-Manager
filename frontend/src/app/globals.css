@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+/* Drop your Sifonn font file(s) in ./fonts/ — this picks them up automatically.
+   Until then, headings fall back to a bold system-rounded stack. */
+@font-face {
+  font-family: "Sifonn";
+  src:
+    url("/fonts/Sifonn-Basic.woff2") format("woff2"),
+    url("/fonts/Sifonn-Basic.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Palladian / Oatmeal / Abyssal Anchorfish Blue / Blue Fantastic / Burning Flame / Truffle Trouble */
+  --neu-bg: #eee9df;
+  --neu-card-bg: #c9c1b1;
+  --neu-text: #1b2632;
+  --neu-text-muted: #2c3b4d;
+  --neu-shadow-dark: rgba(150, 140, 122, 0.5);
+  --neu-shadow-light: rgba(255, 255, 252, 0.95);
+  --neu-accent: #ffb162;
+  --neu-danger: #a35139;
+  --font-heading: "Sifonn", "Arial Black", "Segoe UI", ui-rounded, sans-serif;
+  --font-geometric: var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--neu-bg);
+  --color-foreground: var(--neu-text);
+  --font-sans: var(--font-geometric);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--neu-bg);
+  color: var(--neu-text);
+  font-family: var(--font-geometric);
+}
+
+h1,
+h2,
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+/* Neumorphic surfaces: everything shares the page background color and is
+   defined by shadow, not borders. "Raised" = sitting above the page,
+   "pressed" = recessed into it (used for wells/inputs/columns). */
+
+.neu-raised {
+  background: var(--neu-bg);
+  border-radius: 20px;
+  box-shadow:
+    5px 5px 8px var(--neu-shadow-dark),
+    -5px -5px 8px var(--neu-shadow-light);
+}
+
+/* Task cards: a shade darker than the pressed column they sit in, plus a
+   subtle grain (SVG noise) so they read as a distinct textured material
+   rather than flat color. */
+.neu-raised-sm {
+  background-color: var(--neu-card-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border-radius: 12px;
+  box-shadow:
+    4px 4px 8px var(--neu-shadow-dark),
+    -4px -4px 8px var(--neu-shadow-light);
+}
+
+/* Flat tag: for small labels that live inside an already-textured/shadowed
+   card. No shadow of its own — a second carved-in shadow at that size just
+   reads as clutter. A tonal tint is enough to separate it from the card. */
+.neu-tag {
+  background: rgba(255, 255, 252, 0.5);
+  border-radius: 999px;
+}
+
+/* Color-coded tags: same flat/shadowless treatment as .neu-tag, but tinted
+   so different kinds of info (person, project, urgency) read apart at a
+   glance instead of every pill being the same neutral gray-tan. */
+.neu-tag-navy {
+  background: rgba(27, 38, 50, 0.14);
+  color: var(--neu-text);
+  border-radius: 999px;
+}
+
+.neu-tag-orange {
+  background: rgba(255, 177, 98, 0.4);
+  color: var(--neu-text);
+  border-radius: 999px;
+}
+
+.neu-tag-rust {
+  background: rgba(163, 81, 57, 0.2);
+  color: var(--neu-danger);
+  border-radius: 999px;
+}
+
+.neu-pressed {
+  background: var(--neu-bg);
+  border-radius: 18px;
+  box-shadow:
+    inset 5px 5px 10px var(--neu-shadow-dark),
+    inset -5px -5px 10px var(--neu-shadow-light);
+}
+
+.neu-pressed-sm {
+  background: var(--neu-bg);
+  border-radius: 10px;
+  box-shadow:
+    inset 3px 3px 6px var(--neu-shadow-dark),
+    inset -3px -3px 6px var(--neu-shadow-light);
+}
+
+.neu-btn {
+  background: var(--neu-bg);
+  color: var(--neu-text);
+  border-radius: 14px;
+  box-shadow:
+    6px 6px 12px var(--neu-shadow-dark),
+    -6px -6px 12px var(--neu-shadow-light);
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+
+.neu-btn:hover {
+  box-shadow:
+    4px 4px 8px var(--neu-shadow-dark),
+    -4px -4px 8px var(--neu-shadow-light);
+}
+
+/* Primary action variant: solid accent fill instead of neutral surface.
+   Shadow stays tied to the page's own light/dark (it's the page surface
+   being displaced, not the button's material), so it layers cleanly on
+   top of .neu-btn without touching the shadow rules. */
+.neu-btn-primary {
+  background: var(--neu-accent);
+  color: var(--neu-text);
+}
+
+.neu-btn:active {
+  box-shadow:
+    inset 4px 4px 8px var(--neu-shadow-dark),
+    inset -4px -4px 8px var(--neu-shadow-light);
+  transform: translateY(1px);
+}
+
+/* Glass: a deliberate one-off contrast against the neumorphic surfaces —
+   translucent, saturated blur, layered gloss streaks like a physical pane. */
+.glass-panel {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 177, 98, 0.1) 45%,
+    rgba(255, 255, 255, 0.05) 70%,
+    rgba(255, 177, 98, 0.2) 100%
+  );
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow:
+    0 14px 40px rgba(150, 140, 122, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -14px 24px -16px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(150, 140, 122, 0.14);
+  overflow: hidden;
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 35%);
+  pointer-events: none;
+}
+
+.glass-panel::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: 4%;
+  width: 16%;
+  height: 150%;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 65%);
+  transform: skewX(-14deg);
+  pointer-events: none;
+}
+
+.glass-ghost {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px dashed rgba(150, 140, 122, 0.4);
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  transition: background 0.12s ease;
+}
+
+.glass-ghost:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
