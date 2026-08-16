@@ -6,7 +6,7 @@ First prototype: a Jira-style task board (create/assign tasks, track status, sor
 
 - **Frontend**: Next.js (App Router) + Tailwind CSS — `frontend/`
 - **Backend**: FastAPI — `backend/`
-- **Database**: SQLite locally out of the box; swap in Supabase Postgres by setting `DATABASE_URL` (see `backend/.env.example`)
+- **Database**: SQLite locally for now
 
 ## Running locally
 
@@ -23,19 +23,3 @@ uvicorn app.main:app --reload --port 8000
 npm install
 npm run dev
 ```
-
-Open http://localhost:3000. The frontend expects the API at `http://localhost:8000` (see `frontend/.env.local`).
-
-## Moving to Supabase
-
-1. Create a free project at supabase.com.
-2. Project Settings → Database → Connection string (URI, "Session pooler"). Copy it into `backend/.env` as `DATABASE_URL` (change `postgres://` to `postgresql://`).
-3. Restart the backend — tables are created automatically on startup (`Base.metadata.create_all`).
-4. Supabase Auth (Google sign-in restricted to your ATC domain) is the natural next step once login is built.
-
-## Next steps (per spec)
-
-- Home hub + nav shell, Google login restricted to the ATC email domain
-- Finance page: purchase tracking + grant web scraper
-- Calendar page
-- Event page: Chicago venue scraper
