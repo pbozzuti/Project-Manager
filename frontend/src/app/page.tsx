@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { signIn } from "@/auth";
 
 export default function LoginPage() {
   return (
@@ -7,16 +7,22 @@ export default function LoginPage() {
         <h1 className="text-3xl mb-1">ATC Manager</h1>
         <p className="text-sm text-[var(--neu-text-muted)] mb-8">Adams Theatre Company</p>
 
-        <Link
-          href="/home"
-          className="neu-btn neu-btn-primary block w-full py-3 text-sm font-medium"
+        <form
+          action={async () => {
+            "use server";
+            await signIn("google", { redirectTo: "/home" });
+          }}
         >
-          Continue with Google
-        </Link>
+          <button
+            type="submit"
+            className="neu-btn neu-btn-primary block w-full py-3 text-sm font-medium"
+          >
+            Continue with Google
+          </button>
+        </form>
 
         <p className="mt-5 text-xs text-[var(--neu-text-muted)] leading-relaxed">
-          Restricted to Adams Theatre Company email addresses. Sign-in isn&apos;t wired up
-          yet — this just previews the look.
+          Restricted to Adams Theatre Company Google accounts.
         </p>
       </div>
     </div>

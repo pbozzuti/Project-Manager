@@ -98,4 +98,15 @@ class Announcement(Base):
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    email = Column(String, nullable=False, unique=True)
+    name = Column(String, nullable=True)
+    picture = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_login_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
 Base.metadata.create_all(bind=engine)

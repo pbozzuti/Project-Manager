@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import CalendarAgenda from "@/components/CalendarAgenda";
+import { auth, signOut } from "@/auth";
 
 const TILES = [
   {
@@ -23,12 +24,32 @@ const TILES = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await auth();
+
   return (
     <div className="max-w-6xl mx-auto p-6 md:p-10">
-      <div className="mb-10">
-        <h1 className="text-4xl mb-2">Adams Theatre Company</h1>
-        <p className="text-[var(--neu-text-muted)]">Manager hub</p>
+      <div className="mb-10 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-4xl mb-2">Adams Theatre Company</h1>
+          <p className="text-[var(--neu-text-muted)]">Manager hub</p>
+        </div>
+
+        {session?.user && (
+          <form
+            action={async () => {
+              "use server";
+              await signOut({ redirectTo: "/" });
+            }}
+          >
+            <button
+              type="submit"
+              className="neu-tag px-3 py-1.5 text-xs font-medium text-[var(--neu-text-muted)] hover:text-[var(--neu-text)]"
+            >
+              {session.user.email} · Sign out
+            </button>
+          </form>
+        )}
       </div>
 
       <AnnouncementBanner />

@@ -69,6 +69,23 @@ class PurchaseOut(PurchaseBase):
     updated_at: datetime
 
 
+class UserUpsert(BaseModel):
+    email: str
+    name: Optional[str] = None
+    picture: Optional[str] = None
+
+
+class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    email: str
+    name: Optional[str] = None
+    picture: Optional[str] = None
+    created_at: datetime
+    last_login_at: datetime
+
+
 class CalendarEventBase(BaseModel):
     title: str
     date: date
