@@ -6,6 +6,7 @@ export interface Task {
   description: string | null;
   assignee: string;
   project: string;
+  link: string | null;
   deadline: string | null;
   status: TaskStatus;
   created_at: string;
@@ -17,6 +18,7 @@ export interface TaskInput {
   description?: string;
   assignee: string;
   project: string;
+  link?: string;
   deadline?: string;
   status?: TaskStatus;
 }

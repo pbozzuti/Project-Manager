@@ -16,10 +16,12 @@ function isOverdue(deadline: string | null, status: TaskStatus) {
 export default function TaskCard({
   task,
   onStatusChange,
+  onEdit,
   onDelete,
 }: {
   task: Task;
   onStatusChange: (id: string, status: TaskStatus) => void;
+  onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
 }) {
   const overdue = isOverdue(task.deadline, task.status);
@@ -28,13 +30,22 @@ export default function TaskCard({
     <div className="neu-raised-sm p-3.5">
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-medium text-[var(--neu-text)]">{task.title}</h3>
-        <button
-          onClick={() => onDelete(task.id)}
-          className="text-[var(--neu-text-muted)] hover:text-[var(--neu-danger)] text-sm leading-none"
-          aria-label="Delete task"
-        >
-          ✕
-        </button>
+        <div className="flex gap-2 shrink-0">
+          <button
+            onClick={() => onEdit(task)}
+            className="text-[var(--neu-text-muted)] hover:text-[var(--neu-text)] text-sm leading-none"
+            aria-label="Edit task"
+          >
+            ✎
+          </button>
+          <button
+            onClick={() => onDelete(task.id)}
+            className="text-[var(--neu-text-muted)] hover:text-[var(--neu-danger)] text-sm leading-none"
+            aria-label="Delete task"
+          >
+            ✕
+          </button>
+        </div>
       </div>
 
       {task.description && (
@@ -46,6 +57,16 @@ export default function TaskCard({
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
         <span className="neu-tag-navy px-2 py-0.5 font-medium">{task.assignee}</span>
         <span className="neu-tag-orange px-2 py-0.5 font-medium">{task.project}</span>
+        {task.link && (
+          <a
+            href={task.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="neu-tag px-2 py-0.5 font-medium text-[var(--neu-text-muted)] hover:text-[var(--neu-text)]"
+          >
+            Link ↗
+          </a>
+        )}
         {task.deadline && (
           <span
             className={`px-2 py-0.5 font-medium ${

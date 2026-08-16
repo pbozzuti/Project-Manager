@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createTask, deleteTask, listTasks, updateTask } from "@/lib/api";
 import { Task, TaskInput, TaskStatus } from "@/lib/types";
 import TaskCard from "./TaskCard";
-import NewTaskForm from "./NewTaskForm";
+import TaskForm from "./TaskForm";
 
 const COLUMNS: { status: TaskStatus; label: string; dot: string }[] = [
   { status: "todo", label: "To Do", dot: "bg-[var(--neu-text-muted)]" },
@@ -20,6 +20,7 @@ export default function TaskBoard() {
   const [assigneeFilter, setAssigneeFilter] = useState("");
   const [projectFilter, setProjectFilter] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -57,6 +58,12 @@ export default function TaskBoard() {
 
   const handleCreate = async (task: TaskInput) => {
     await createTask(task);
+    await refresh();
+  };
+
+  const handleUpdate = async (task: TaskInput) => {
+    if (!editingTask) return;
+    await updateTask(editingTask.id, task);
     await refresh();
   };
 
@@ -157,6 +164,7 @@ export default function TaskBoard() {
                       key={task.id}
                       task={task}
                       onStatusChange={handleStatusChange}
+                      onEdit={setEditingTask}
                       onDelete={handleDelete}
                     />
                   ))}
@@ -172,7 +180,14 @@ export default function TaskBoard() {
         </div>
       )}
 
-      {showForm && <NewTaskForm onCreate={handleCreate} onClose={() => setShowForm(false)} />}
+      {showForm && <TaskForm onSubmit={handleCreate} onClose={() => setShowForm(false)} />}
+      {editingTask && (
+        <TaskForm
+          task={editingTask}
+          onSubmit={handleUpdate}
+          onClose={() => setEditingTask(null)}
+        />
+      )}
     </div>
   );
 }

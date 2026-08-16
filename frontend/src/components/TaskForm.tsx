@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TaskInput } from "@/lib/types";
+import { Task, TaskInput } from "@/lib/types";
 
 const emptyForm: TaskInput = {
   title: "",
@@ -12,14 +12,29 @@ const emptyForm: TaskInput = {
   deadline: "",
 };
 
-export default function NewTaskForm({
-  onCreate,
+function toForm(task: Task): TaskInput {
+  return {
+    title: task.title,
+    description: task.description ?? "",
+    assignee: task.assignee,
+    project: task.project,
+    link: task.link ?? "",
+    deadline: task.deadline ?? "",
+    status: task.status,
+  };
+}
+
+export default function TaskForm({
+  task,
+  onSubmit,
   onClose,
 }: {
-  onCreate: (task: TaskInput) => Promise<void>;
+  task?: Task;
+  onSubmit: (task: TaskInput) => Promise<void>;
   onClose: () => void;
 }) {
-  const [form, setForm] = useState<TaskInput>(emptyForm);
+  const editing = !!task;
+  const [form, setForm] = useState<TaskInput>(task ? toForm(task) : emptyForm);
   const [submitting, setSubmitting] = useState(false);
 
   const update = (field: keyof TaskInput) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -30,7 +45,7 @@ export default function NewTaskForm({
     if (!form.title || !form.assignee || !form.project) return;
     setSubmitting(true);
     try {
-      await onCreate({ ...form, link: form.link || undefined, deadline: form.deadline || undefined });
+      await onSubmit({ ...form, link: form.link || undefined, deadline: form.deadline || undefined });
       onClose();
     } finally {
       setSubmitting(false);
@@ -44,7 +59,7 @@ export default function NewTaskForm({
         className="neu-raised w-full max-w-md p-6 space-y-3.5"
       >
         <div className="flex items-center justify-between mb-1">
-          <h2 className="text-xl text-[var(--neu-text)]">New Task</h2>
+          <h2 className="text-xl text-[var(--neu-text)]">{editing ? "Edit Task" : "New Task"}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -103,7 +118,7 @@ export default function NewTaskForm({
           disabled={submitting}
           className="neu-btn neu-btn-primary w-full py-2.5 text-sm font-medium disabled:opacity-50"
         >
-          {submitting ? "Creating…" : "Create Task"}
+          {submitting ? "Saving…" : editing ? "Save Changes" : "Create Task"}
         </button>
       </form>
     </div>

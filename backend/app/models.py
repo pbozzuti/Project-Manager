@@ -44,6 +44,7 @@ class Task(Base):
     description = Column(String, nullable=True)
     assignee = Column(String, nullable=False)
     project = Column(String, nullable=False)
+    link = Column(String, nullable=True)
     deadline = Column(Date, nullable=True)
     status = Column(Enum(TaskStatus), nullable=False, default=TaskStatus.todo)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

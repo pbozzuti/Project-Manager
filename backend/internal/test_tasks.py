@@ -8,10 +8,26 @@ def test_create_and_list_task(client, auth_headers):
     body = res.json()
     assert body["title"] == "Book venue"
     assert body["status"] == "todo"
+    assert body["link"] is None
 
     res = client.get("/tasks", headers=auth_headers)
     assert res.status_code == 200
     assert len(res.json()) == 1
+
+
+def test_create_task_with_link(client, auth_headers):
+    res = client.post(
+        "/tasks",
+        json={
+            "title": "Review design",
+            "assignee": "Jamie",
+            "project": "Fall Show",
+            "link": "https://docs.google.com/document/d/abc123",
+        },
+        headers=auth_headers,
+    )
+    assert res.status_code == 201
+    assert res.json()["link"] == "https://docs.google.com/document/d/abc123"
 
 
 def test_update_task_status(client, auth_headers):

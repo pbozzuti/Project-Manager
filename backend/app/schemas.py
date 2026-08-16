@@ -12,6 +12,7 @@ class TaskBase(BaseModel):
     description: Optional[str] = None
     assignee: str
     project: str
+    link: Optional[str] = None
     deadline: Optional[date] = None
     status: TaskStatus = TaskStatus.todo
 
@@ -25,6 +26,7 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     assignee: Optional[str] = None
     project: Optional[str] = None
+    link: Optional[str] = None
     deadline: Optional[date] = None
     status: Optional[TaskStatus] = None
 
