@@ -88,6 +88,11 @@ export default function AnnouncementBanner() {
       <div className="relative z-10 flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[var(--neu-text)] leading-relaxed">{announcement.message}</p>
+          {announcement.author_name && (
+            <p className="mt-1.5 text-xs text-[var(--neu-text-muted)]">
+              — {announcement.author_name.split(" ")[0]}
+            </p>
+          )}
         </div>
         <div className="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
           <button

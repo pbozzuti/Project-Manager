@@ -19,9 +19,22 @@ const TILES = [
   {
     href: "/events",
     title: "Events",
-    description: "Find and track Chicago performance venues.",
+    description: "Chicago performance venues & prices.",
     ready: false,
   },
+  {
+    href: "/analytics",
+    title: "Analytics",
+    description: "Social, web, and software analytics.",
+    ready: false,
+  },
+  {
+    href: "/internal",
+    title: "Software Management",
+    description: "tests",
+    ready: true,
+  },
+  
 ];
 
 export default async function HomePage() {

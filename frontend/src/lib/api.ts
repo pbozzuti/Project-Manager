@@ -8,6 +8,7 @@ import {
   PurchaseInput,
   Task,
   TaskInput,
+  TestRunResult,
 } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -111,4 +112,8 @@ export function setAnnouncement(message: string): Promise<Announcement> {
 
 export function clearAnnouncement(): Promise<void> {
   return request<void>("/announcement", { method: "DELETE" });
+}
+
+export function runTests(): Promise<TestRunResult> {
+  return request<TestRunResult>("/internal/run-tests", { method: "POST" });
 }

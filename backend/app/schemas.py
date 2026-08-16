@@ -112,6 +112,8 @@ class AnnouncementOut(BaseModel):
 
     id: uuid.UUID
     message: str
+    author_name: Optional[str] = None
+    author_email: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

@@ -22,6 +22,7 @@
   --neu-shadow-light: rgba(255, 255, 252, 0.95);
   --neu-accent: #ffb162;
   --neu-danger: #a35139;
+  --neu-success: #5b7a52;
   --font-heading: "Sifonn", "Arial Black", "Segoe UI", ui-rounded, sans-serif;
   --font-geometric: var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
 }

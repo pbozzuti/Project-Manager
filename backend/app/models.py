@@ -94,6 +94,8 @@ class Announcement(Base):
 
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     message = Column(String, nullable=False)
+    author_name = Column(String, nullable=True)
+    author_email = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 

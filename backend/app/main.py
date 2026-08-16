@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import announcement, calendar_events, grants, purchases, tasks, users
+from .routers import announcement, calendar_events, grants, internal, purchases, tasks, users
 
 app = FastAPI(title="Adams Theatre Company Manager API")
 
@@ -23,6 +23,7 @@ app.include_router(grants.router)
 app.include_router(calendar_events.router)
 app.include_router(announcement.router)
 app.include_router(users.router)
+app.include_router(internal.router)
 
 
 @app.get("/health")

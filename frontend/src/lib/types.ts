@@ -78,6 +78,14 @@ export interface CalendarEventInput {
 export interface Announcement {
   id: string;
   message: string;
+  author_name: string | null;
+  author_email: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface TestRunResult {
+  passed: boolean;
+  summary: string;
+  output: string;
 }

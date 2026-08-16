@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from .. import models, schemas
-from ..auth import require_user
+from ..auth import CurrentUser, require_user
 from ..database import get_db
 
 router = APIRouter(
@@ -18,13 +18,21 @@ def get_announcement(db: Session = Depends(get_db)):
 
 
 @router.put("", response_model=schemas.AnnouncementOut)
-def set_announcement(payload: schemas.AnnouncementSet, db: Session = Depends(get_db)):
+def set_announcement(
+    payload: schemas.AnnouncementSet,
+    current_user: CurrentUser = Depends(require_user),
+    db: Session = Depends(get_db),
+):
     existing = db.query(models.Announcement).first()
     if existing:
         existing.message = payload.message
     else:
         existing = models.Announcement(message=payload.message)
         db.add(existing)
+    # Who pinned it — taken from the verified token, never the request body,
+    # so it can't be spoofed by whoever's calling the API.
+    existing.author_name = current_user.name
+    existing.author_email = current_user.email
     db.commit()
     db.refresh(existing)
     return existing

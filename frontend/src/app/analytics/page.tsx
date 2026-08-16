@@ -1,12 +1,12 @@
 import AppHeader from "@/components/AppHeader";
 import ComingSoon from "@/components/ComingSoon";
 
-export default function EventsPage() {
+export default function AnalyticsPage() {
   return (
     <>
       <AppHeader />
       <ComingSoon
-        title="Events"
+        title="Analytics"
         description="N/A"
       />
     </>
