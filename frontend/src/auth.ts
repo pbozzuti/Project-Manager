@@ -43,9 +43,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: profile?.name,
             picture: (profile as { picture?: string } | undefined)?.picture,
           }),
+          // Without a timeout, a backend that's down or cold-starting leaves
+          // this call hanging, which hangs the whole OAuth redirect.
+          signal: AbortSignal.timeout(4000),
         });
       } catch (err) {
-        // Don't block sign-in if the backend happens to be down — the user
+        // Don't block sign-in if the backend is down or slow — the user
         // still gets a valid session, they just won't show up in /users yet.
         console.error("Failed to sync user to backend:", err);
       }
