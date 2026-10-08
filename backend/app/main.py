@@ -1,8 +1,10 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
+from .database import engine
 from .routers import announcement, calendar_events, grants, internal, purchases, tasks, users
 
 app = FastAPI(title="Adams Theatre Company Manager API")
@@ -29,3 +31,16 @@ app.include_router(internal.router)
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/health/db")
+def health_db():
+    # Runs a real query so a scheduled ping counts as database activity
+    # (Supabase's free tier pauses projects after ~7 days without any).
+    # Returns no data, so it's safe to leave unauthenticated.
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+    except Exception:
+        raise HTTPException(status_code=503, detail="database unreachable")
+    return {"db": "ok"}
